@@ -3,5 +3,6 @@
     <pages>
         <page name='整数反转'/>
         <page name='两数之和'/>
+        <page name='长按键入'/>
     </pages>
 </playground>
