@@ -47,8 +47,10 @@
  著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  
  */
+// 两个方案的时间和空间损耗一样，第一个写法稍微简短些，后一个好理解。
 
-func isLongPressedName(_ name: String, _ typed: String) -> Bool {
+/// 依赖交换Iterator
+func _isLongPressedName(_ name: String, _ typed: String) -> Bool {
     var nameIter = name.makeIterator()
     var typedIter = typed.makeIterator()
     while let comparing = nameIter.next() {
@@ -76,11 +78,48 @@ func isLongPressedName(_ name: String, _ typed: String) -> Bool {
     return typedIter.next() == nil
 }
 
-assert(isLongPressedName("alex", "aaleex"))
-assert(isLongPressedName("alex", "aaleex"))
-assert(isLongPressedName("saeed", "ssaaedd") == false)
-assert(isLongPressedName("leelee", "lleeelee"))
-assert(isLongPressedName("laiden", "laiden"))
-assert(isLongPressedName("xnhtq", "xhhttqq") == false) // X
-assert(isLongPressedName("alex", "alexxr") == false) // X
+/// 依赖临时Character
+func isLongPressedName(_ name: String, _ typed: String) -> Bool {
+    var nameIter = name.makeIterator()
+    var typedIter = typed.makeIterator()
+    var comparing:Character?
+    var forward = nameIter.next()
+    var forwardTyped = typedIter.next()
+    while forward != nil {
+        if forward != forwardTyped {
+            return false
+        }
+        comparing = forward
+        
+        var nameCurCount = 0
+        repeat {
+            forward = nameIter.next()
+            if forward == comparing {
+                nameCurCount += 1
+            }
+        } while forward == comparing
+        
+        var typedCurCount = 0
+        repeat {
+            forwardTyped = typedIter.next()
+            if forwardTyped == comparing {
+                typedCurCount += 1
+            }
+        } while forwardTyped == comparing
+        
+        if nameCurCount > typedCurCount {
+            return false
+        }
+    }
+    return forwardTyped == nil
+}
+
+//assert(isLongPressedName("alex", "aaleex"))
+//assert(isLongPressedName("alex", "aaleex"))
+//assert(isLongPressedName("saeed", "ssaaedd") == false)
+//assert(isLongPressedName("leelee", "lleeelee"))
+//assert(isLongPressedName("laiden", "laiden"))
+//assert(isLongPressedName("xnhtq", "xhhttqq") == false) // X
+//print(isLongPressedName("alex", "alexxr") == false) // X
+assert(isLongPressedName("ax", "axxxxxxxxxxxxxxxxxxxxxxx"))
 //: [Next](@next)
