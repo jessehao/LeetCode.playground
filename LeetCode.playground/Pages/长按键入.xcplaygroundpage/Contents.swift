@@ -49,8 +49,8 @@
  */
 // 两个方案的时间和空间损耗一样，第一个写法稍微简短些，后一个好理解。
 
-/// 依赖交换Iterator
-func _isLongPressedName(_ name: String, _ typed: String) -> Bool {
+/// 依赖交换Iterator的数字符解法
+func isLongPressedName_1(_ name: String, _ typed: String) -> Bool {
     var nameIter = name.makeIterator()
     var typedIter = typed.makeIterator()
     while let comparing = nameIter.next() {
@@ -79,7 +79,7 @@ func _isLongPressedName(_ name: String, _ typed: String) -> Bool {
 }
 
 /// 依赖临时Character
-func isLongPressedName(_ name: String, _ typed: String) -> Bool {
+func isLongPressedName_2(_ name: String, _ typed: String) -> Bool {
     var nameIter = name.makeIterator()
     var typedIter = typed.makeIterator()
     var comparing:Character?
@@ -114,12 +114,30 @@ func isLongPressedName(_ name: String, _ typed: String) -> Bool {
     return forwardTyped == nil
 }
 
-//assert(isLongPressedName("alex", "aaleex"))
-//assert(isLongPressedName("alex", "aaleex"))
-//assert(isLongPressedName("saeed", "ssaaedd") == false)
-//assert(isLongPressedName("leelee", "lleeelee"))
-//assert(isLongPressedName("laiden", "laiden"))
-//assert(isLongPressedName("xnhtq", "xhhttqq") == false) // X
-//print(isLongPressedName("alex", "alexxr") == false) // X
+/// 迭代器双指针解法
+func isLongPressedName(_ name: String, _ typed: String) -> Bool {
+    var nameIterator = name.makeIterator()
+    var typedIterator = typed.makeIterator()
+    var lastTypedChar:Character?
+    var currentNameChar = nameIterator.next()
+    while let currentTypedChar = typedIterator.next() {
+        if currentNameChar != nil && currentNameChar == currentTypedChar {
+            currentNameChar = nameIterator.next()
+        } else if lastTypedChar != currentTypedChar {
+            return false
+        }
+        lastTypedChar = currentTypedChar
+    }
+    return currentNameChar == nil
+}
+
+assert(isLongPressedName("alex", "aaleex"))
+assert(isLongPressedName("alex", "aaleex"))
+assert(isLongPressedName("saeed", "ssaaedd") == false)
+assert(isLongPressedName("leelee", "lleeelee"))
+assert(isLongPressedName("laiden", "laiden"))
+assert(isLongPressedName("xnhtq", "xhhttqq") == false) // X
+assert(isLongPressedName("alex", "alexxr") == false) // X
 assert(isLongPressedName("ax", "axxxxxxxxxxxxxxxxxxxxxxx"))
+assert(isLongPressedName("pyplrz", "ppyypllr") == false) // X
 //: [Next](@next)
