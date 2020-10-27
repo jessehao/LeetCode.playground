@@ -27,8 +27,10 @@
  cache.get(4);       // 返回  4
  ```
 */
-print("starto!")
 
+/// 双向链表节点
+///
+/// 双向链表需要引用类型实现
 class Node {
     let key:Int
     var value:Int
@@ -41,6 +43,13 @@ class Node {
     }
 }
 
+/// LRU缓存
+///
+/// 由哈希表及双向链表实现，哈希表用于Key-Value读写，双向链表用于组织置换序列。链表中，头部永远为最近一次访问/修改的节点，所以尾部就永远是待淘汰数据。
+///
+/// `put`：将Key关联的节点放到链表头部，如果是新增数据，则淘汰尾部。
+///
+/// `get`：将Key关联的节点放到链表头部
 class LRUCache {
     let capacity:Int
     var dict:[Int : Node] = [:]
@@ -53,7 +62,6 @@ class LRUCache {
     }
 
     func get(_ key: Int) -> Int {
-//        defer { print("after get [\(key)] = \(self) dict: \(dict)") }
         guard let node = dict[key] else {
             return -1
         }
@@ -62,7 +70,6 @@ class LRUCache {
     }
 
     func put(_ key: Int, _ value: Int) {
-//        defer { print("after put [\(key): \(value)] = \(self) dict: \(dict)") }
         if let node = dict[key] {
             node.value = value
             moveToHead(node)
@@ -83,7 +90,6 @@ class LRUCache {
     }
     
     func removeNode(_ node:Node) {
-//        print("removing: \(node.prev?.value ?? -1) <- (\(node.value)) -> \(node.next?.value ?? -1)")
         if node === tail {
             tail = node.prev
         }
@@ -91,7 +97,6 @@ class LRUCache {
         node.next?.prev = node.prev
         node.next = nil
         node.prev = nil
-//        print("after removing [\(node.key)] = \(self)")
     }
     
     func addToHead(_ node:Node) {
