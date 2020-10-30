@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' display-mode='raw'>
+<playground version='6.0' target-platform='ios' display-mode='rendered'>
     <pages>
         <page name='整数反转'/>
         <page name='两数之和'/>
@@ -7,5 +7,8 @@
         <page name='划分字母区间'/>
         <page name='环形链表'/>
         <page name='LRU缓存'/>
+        <page name='岛屿的周长'/>
+        <page name='独一无二的出现次数'/>
+        <page name='回文数'/>
     </pages>
 </playground>
